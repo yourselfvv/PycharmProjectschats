@@ -120,8 +120,7 @@ class ChatBot:
                 xy = [[int(expression[:expression.find("x")]), nu],
                       [int(expression_down[:expression_down.find("x")]), nd]]
                 result = str(np.linalg.solve(xy, [int(expression[expression.find('=') + 1:len(expression)]), num_2]))
-                result_list = ['x = ', result[1:result.find(' ')], '  y = ',
-                               result[result.find(' ') + 1:len(result) - 1]]
+                result_list = ['x = ', result[1:result.find(' ')], '  y = ', result[result.find(' ') + 1:len(result) - 1]]
                 return "".join(result_list)
         equation = expression.find('=')
         equation_list = []
@@ -525,7 +524,11 @@ class ChatBot:
                 num1 = int(memory[0:memory.find('와')])
             else:
                 num1 = int(memory[0:memory.find('과')])
-            num2, data = int(memory[memory.find('과') + 2:memory.find('의')]), []
+            if '와' in memory:
+                num2 = int(memory[memory.find('와') + 2:memory.find('의')])
+            else:
+                num2 = int(memory[memory.find('과') + 2:memory.find('의')])
+            data = []
             for i in range(1, num1 + 1):
                 if (num1 % i == 0) & (num2 % i == 0):
                     data.append(i)
@@ -538,7 +541,10 @@ class ChatBot:
                 num1 = int(memory[0:memory.find('와')])
             else:
                 num1 = int(memory[0:memory.find('과')])
-            num2 = int(memory[memory.find('과') + 2:memory.find('의')])
+            if '와' in memory:
+                num2 = int(memory[memory.find('와') + 2:memory.find('의')])
+            else:
+                num2 = int(memory[memory.find('과') + 2:memory.find('의')])
             data1, data2, cam = [], [], []
             for i in range(1, num2 + 1):
                 data1.append(i * num1)
@@ -1011,152 +1017,7 @@ class ChatBot:
             else:
                 memory = input("문제 내용 >>> ")
             expression = []
-            if '삼각' in memory and '넓' in memory:
-                if memory.find('높이') != -1:
-                    if memory.find('높이') < memory.find('변'):
-                        h = memory[memory.find('높이') + 3:memory.find('c')]
-                        memory = memory[memory.find('c') + 2:len(memory)]
-                        s = memory[memory.find('변') + 3:memory.find('c')]
-                    else:
-                        h = memory[memory.find('변') + 3:memory.find('c')]
-                        memory = memory[memory.find('c') + 2:len(memory)]
-                        s = memory[memory.find('높이') + 3:memory.find('c')]
-                    return "S = %s" % (int(s) * int(h) / 2)
-            elif '사각' in memory:
-                if '사각' in memory and '넓' in memory:
-                    if memory.find('높이') != -1:
-                        if memory.find('높이') < memory.find('변'):
-                            h = memory[memory.find('높이') + 3:memory.find('c')]
-                            memory = memory[memory.find('c') + 2:len(memory)]
-                            s = memory[memory.find('변') + 3:memory.find('c')]
-                        else:
-                            h = memory[memory.find('변') + 3:memory.find('c')]
-                            memory = memory[memory.find('c') + 2:len(memory)]
-                            s = memory[memory.find('높이') + 3:memory.find('c')]
-                        return "넓이: %s" % (int(s) * int(h))
-            elif '원' in chat:
-                if '넓' in chat:
-                    if '지름' in chat:
-                        if '반' in chat:
-                            if 'cm' in chat:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
-                                return "%sπcm²" % (r ** 2)
-                            else:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
-                                return "%sπ" % (r ** 2)
-                        else:
-                            if 'cm' in chat:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
-                                return "%sπcm²" % ((r / 2) ** 2)
-                            else:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
-                                return "%sπ" % ((r / 2) ** 2)
-                else:
-                    if '지름' in chat:
-                        if '반' in chat:
-                            if 'cm' in chat:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
-                                return "%sπcm" % (r * 2)
-                            else:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
-                                return "%sπ" % (r * 2)
-                        else:
-                            if 'cm' in chat:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
-                                return "%sπcm" % (float(r))
-                            else:
-                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
-                                return "%sπ" % (float(r))
-            elif '어떤수' in memory:
-                memory1 = memory[0:memory.find('가')]
-                if '배' in memory1:
-                    if '두' in memory1:
-                        expression.append('2x')
-                    if '세' in memory1:
-                        expression.append('3x')
-                    if '네' in memory1:
-                        expression.append('4x')
-                    if '다섯' in memory1:
-                        expression.append('5x')
-                    if '여' in memory1:
-                        if '섯' in memory1:
-                            expression.append('6x')
-                        else:
-                            expression.append('8x')
-                    if '일' in memory1:
-                        expression.append('7x')
-                    if '아' in memory1:
-                        expression.append('9x')
-                    if '열' in memory1:
-                        expression.append('10x')
-                else:
-                    expression.append('1x')
-                if '더' in memory1:
-                    if '-' in memory1:
-                        expression.append("-%s" % (int(memory1[memory1.find('더') - 5:memory1.find('더') - 2])))
-                    else:
-                        expression.append("+%s" % (int(memory1[memory1.find('더') - 4:memory1.find('더') - 2])))
-                elif '뺀' in memory1:
-                    if '-' in memory1:
-                        expression.append("+%s" % (int(memory1[memory1.find('뺀') - 5:memory1.find('뺀') - 2])))
-                    else:
-                        expression.append("-%s" % (int(memory1[memory1.find('뺀') - 5:memory1.find('뺀') - 2])))
-                else:
-                    expression.append('+0')
-                memory = memory[memory.find('가') + 1:len(memory)]
-                if memory.find('가') == -1:
-                    memory = memory[memory.find('는') + 1:len(memory)]
-                expression.append('=')
-                if '배' in memory:
-                    if '두' in memory:
-                        expression.append('2x')
-                    if '세' in memory:
-                        expression.append('3x')
-                    if '네' in memory:
-                        expression.append('4x')
-                    if '다섯' in memory:
-                        expression.append('5x')
-                    if '여' in memory:
-                        if '섯' in memory:
-                            expression.append('6x')
-                        else:
-                            expression.append('8x')
-                    if '일' in memory:
-                        expression.append('7x')
-                    if '아' in memory:
-                        expression.append('9x')
-                    if '열' in memory:
-                        expression.append('10x')
-                else:
-                    expression.append('1x')
-                if '더' in memory:
-                    if '-' in memory:
-                        expression.append("-%s" % (int(memory[memory.find('더') - 5:memory.find('더') - 2])))
-                    else:
-                        expression.append("+%s" % (int(memory[memory.find('더') - 5:memory.find('더') - 2])))
-                elif '뺀' in memory:
-                    if '-' in memory:
-                        expression.append("+%s" % (int(memory[memory.find('뺀') - 5:memory.find('뺀') - 2])))
-                    else:
-                        expression.append("-%s" % (int(memory[memory.find('뺀') - 5:memory.find('뺀') - 2])))
-                else:
-                    expression.append('+0')
-                expression = "".join(expression)
-                return self.calculator(expression=expression)
-            elif '공약' in memory:
-                if '와' in memory:
-                    num1 = int(memory[0:memory.find('와')])
-                else:
-                    num1 = int(memory[0:memory.find('과')])
-                num2, data = int(memory[memory.find('과') + 2:memory.find('의')]), []
-                for i in range(1, num1 + 1):
-                    if (num1 % i == 0) & (num2 % i == 0):
-                        data.append(i)
-                data1 = []
-                for j in data:
-                    data1.append(str(j))
-                return ", ".join(data1)
-            elif 'x' in chat and 'y' in chat:
+            if 'x' in chat and 'y' in chat:
                 memory = chat[:chat.find('y')]
                 expression = []
                 if '배' in memory:
@@ -1308,7 +1169,152 @@ class ChatBot:
                 result = str(np.linalg.solve(xy, [int(expression[expression.find('=') + 1:len(expression)]), num_2]))
                 result_list = ['x = ', result[1:result.find(' ')], '  y = ',
                                result[result.find(' ') + 1:len(result) - 1]]
-                return "".join(result_list)
+                return " ".join(result_list)
+            if '삼각' in memory and '넓' in memory:
+                if memory.find('높이') != -1:
+                    if memory.find('높이') < memory.find('변'):
+                        h = memory[memory.find('높이') + 3:memory.find('c')]
+                        memory = memory[memory.find('c') + 2:len(memory)]
+                        s = memory[memory.find('변') + 3:memory.find('c')]
+                    else:
+                        h = memory[memory.find('변') + 3:memory.find('c')]
+                        memory = memory[memory.find('c') + 2:len(memory)]
+                        s = memory[memory.find('높이') + 3:memory.find('c')]
+                    return "S = %s" % (int(s) * int(h) / 2)
+            elif '사각' in memory:
+                if '사각' in memory and '넓' in memory:
+                    if memory.find('높이') != -1:
+                        if memory.find('높이') < memory.find('변'):
+                            h = memory[memory.find('높이') + 3:memory.find('c')]
+                            memory = memory[memory.find('c') + 2:len(memory)]
+                            s = memory[memory.find('변') + 3:memory.find('c')]
+                        else:
+                            h = memory[memory.find('변') + 3:memory.find('c')]
+                            memory = memory[memory.find('c') + 2:len(memory)]
+                            s = memory[memory.find('높이') + 3:memory.find('c')]
+                        return "넓이: %s" % (int(s) * int(h))
+            elif '원' in chat:
+                if '넓' in chat:
+                    if '지름' in chat:
+                        if '반' in chat:
+                            if 'cm' in chat:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
+                                return "%sπcm²" % (r ** 2)
+                            else:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
+                                return "%sπ" % (r ** 2)
+                        else:
+                            if 'cm' in chat:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
+                                return "%sπcm²" % ((r / 2) ** 2)
+                            else:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
+                                return "%sπ" % ((r / 2) ** 2)
+                else:
+                    if '지름' in chat:
+                        if '반' in chat:
+                            if 'cm' in chat:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
+                                return "%sπcm" % (r * 2)
+                            else:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
+                                return "%sπ" % (r * 2)
+                        else:
+                            if 'cm' in chat:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 4])
+                                return "%sπcm" % (float(r))
+                            else:
+                                r = int(chat[chat.find('름') + 3:chat.find('원') - 2])
+                                return "%sπ" % (float(r))
+            elif '어떤수' in memory:
+                memory1 = memory[0:memory.find('가')]
+                if '배' in memory1:
+                    if '두' in memory1:
+                        expression.append('2x')
+                    if '세' in memory1:
+                        expression.append('3x')
+                    if '네' in memory1:
+                        expression.append('4x')
+                    if '다섯' in memory1:
+                        expression.append('5x')
+                    if '여' in memory1:
+                        if '섯' in memory1:
+                            expression.append('6x')
+                        else:
+                            expression.append('8x')
+                    if '일' in memory1:
+                        expression.append('7x')
+                    if '아' in memory1:
+                        expression.append('9x')
+                    if '열' in memory1:
+                        expression.append('10x')
+                else:
+                    expression.append('1x')
+                if '더' in memory1:
+                    if '-' in memory1:
+                        expression.append("-%s" % (int(memory1[memory1.find('더') - 5:memory1.find('더') - 2])))
+                    else:
+                        expression.append("+%s" % (int(memory1[memory1.find('더') - 4:memory1.find('더') - 2])))
+                elif '뺀' in memory1:
+                    if '-' in memory1:
+                        expression.append("+%s" % (int(memory1[memory1.find('뺀') - 5:memory1.find('뺀') - 2])))
+                    else:
+                        expression.append("-%s" % (int(memory1[memory1.find('뺀') - 5:memory1.find('뺀') - 2])))
+                else:
+                    expression.append('+0')
+                memory = memory[memory.find('가') + 1:len(memory)]
+                if memory.find('가') == -1:
+                    memory = memory[memory.find('는') + 1:len(memory)]
+                expression.append('=')
+                if '배' in memory:
+                    if '두' in memory:
+                        expression.append('2x')
+                    if '세' in memory:
+                        expression.append('3x')
+                    if '네' in memory:
+                        expression.append('4x')
+                    if '다섯' in memory:
+                        expression.append('5x')
+                    if '여' in memory:
+                        if '섯' in memory:
+                            expression.append('6x')
+                        else:
+                            expression.append('8x')
+                    if '일' in memory:
+                        expression.append('7x')
+                    if '아' in memory:
+                        expression.append('9x')
+                    if '열' in memory:
+                        expression.append('10x')
+                else:
+                    expression.append('1x')
+                if '더' in memory:
+                    if '-' in memory:
+                        expression.append("-%s" % (int(memory[memory.find('더') - 5:memory.find('더') - 2])))
+                    else:
+                        expression.append("+%s" % (int(memory[memory.find('더') - 5:memory.find('더') - 2])))
+                elif '뺀' in memory:
+                    if '-' in memory:
+                        expression.append("+%s" % (int(memory[memory.find('뺀') - 5:memory.find('뺀') - 2])))
+                    else:
+                        expression.append("-%s" % (int(memory[memory.find('뺀') - 5:memory.find('뺀') - 2])))
+                else:
+                    expression.append('+0')
+                expression = "".join(expression)
+                return self.calculator(expression=expression)
+            elif '공약' in memory:
+                if '와' in memory:
+                    num1 = int(memory[0:memory.find('와')])
+                else:
+                    num1 = int(memory[0:memory.find('과')])
+                num2, data = int(memory[memory.find('과') + 2:memory.find('의')]), []
+                for i in range(1, num1 + 1):
+                    if (num1 % i == 0) & (num2 % i == 0):
+                        data.append(i)
+                data1 = []
+                for j in data:
+                    data1.append(str(j))
+                return ", ".join(data1)
             elif '공배' in memory:
                 if '와' in memory:
                     num1 = int(memory[0:memory.find('와')])
@@ -1336,13 +1342,21 @@ class ChatBot:
         lists = []
         for line in f1:
             lists.append(line)
+        f11 = open('내꺼.txt', 'r')
+        listss = []
+        for line in f11:
+            listss.append(line)
         f = open('stdout.txt', 'w')
+        ff = open('내꺼.txt', 'w')
+        for line in listss:
+            ff.write(line)
         while True:
             self.chatting = input(" >>> ")
             if '불러' in self.chatting:
                 for line in lists:
                     print(line)
                     f.write(line)
+
             xnt = 0
             en = 'qwertyuiopasdfghjklzxcvbnm'
             tr = googletrans.Translator()
@@ -1364,11 +1378,18 @@ class ChatBot:
                 break
             f.write(">>> " + self.chatting)
             f.write("""
-        """)
+ """)
             f.write(str(self.result))
             f.write("""
-        """)
+""")
+            ff.write(">>> " + self.chatting)
+            ff.write("""
+ """)
+            ff.write(str(self.result))
+            ff.write("""
+""")
         f.close()
+        ff.close()
 
 
     def game(self):
@@ -1377,147 +1398,13 @@ class ChatBot:
         webbrowser.open(url='https://classic.minecraft.net/?join=XqbiL2-611QDfn7m')
 
 
-    def gui_cal(self):
-        import tkinter as tk
-
-        root = tk.Tk()
-        root.title("Calculator")
-        root.geometry("350x500")
-
-        upper_frame = tk.Frame(root, width=400, height=70)
-        upper_frame.pack(pady=40)
-
-        down_frame = tk.Frame(root, width=400, height=100)
-        down_frame.pack(padx=10, pady=10)
-
-        entry = tk.Entry(upper_frame, width=20, font=("Courier", 18), borderwidth=5)
-        entry.pack()
-        entry.insert(0, "")
-
-        answer = []
-
-        def button_clicked(number):
-            current = entry.get()
-            entry.delete(0, tk.END)
-            entry.insert(0, str(current) + str(number))
-            answer.append(number)
-
-        def button_clear():
-            entry.delete(0, tk.END)
-            answer.clear()
-
-        def button_add():
-            entry.delete(0, tk.END)
-            answer.append('+')
-
-        def button_sub():
-            entry.delete(0, tk.END)
-            answer.append('-')
-
-        def button_mul():
-            entry.delete(0, tk.END)
-            answer.append('*')
-
-        def button_div():
-            entry.delete(0, tk.END)
-            answer.append('/')
-
-        def button_equal():
-            entry.delete(0, tk.END)
-            aa = str(''.join(map(str, answer)))
-            entry.insert(0, eval(aa))
-
-        btn7 = tk.Button(down_frame, text='7', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(7))
-        btn7.grid(column=0, row=0, padx=5, pady=5)
-        btn8 = tk.Button(down_frame, text='8', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(8))
-        btn8.grid(column=1, row=0, padx=5, pady=5)
-        btn9 = tk.Button(down_frame, text='9', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(9))
-        btn9.grid(column=2, row=0, padx=5, pady=5)
-
-        btn4 = tk.Button(down_frame, text='4', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(4))
-        btn4.grid(column=0, row=1, padx=5, pady=5)
-        btn5 = tk.Button(down_frame, text='5', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(5))
-        btn5.grid(column=1, row=1, padx=5, pady=5)
-        btn6 = tk.Button(down_frame, text='6', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(6))
-        btn6.grid(column=2, row=1, padx=5, pady=5)
-
-        btn1 = tk.Button(down_frame, text='1', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(1))
-        btn1.grid(column=0, row=2, padx=5, pady=5)
-        btn2 = tk.Button(down_frame, text='2', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(2))
-        btn2.grid(column=1, row=2, padx=5, pady=5)
-        btn3 = tk.Button(down_frame, text='3', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(3))
-        btn3.grid(column=2, row=2, padx=5, pady=5)
-
-        btn_pm = tk.Button(down_frame, text='+/-', padx=5, pady=10, font=("Courier", 15),
-                           command=lambda: button_clicked('-'))
-        btn_pm.grid(column=0, row=3, padx=5, pady=5)
-        btn0 = tk.Button(down_frame, text='0', padx=15, pady=10, font=("Courier", 15),
-                         command=lambda: button_clicked(0))
-        btn0.grid(column=1, row=3, padx=5, pady=5)
-        btn_p = tk.Button(down_frame, text='.', padx=15, pady=10, font=("Courier", 15),
-                          command=lambda: button_clicked('.'))
-        btn_p.grid(column=2, row=3, padx=5, pady=5)
-
-        btn_mul = tk.Button(down_frame, text='×', padx=15, pady=10, font=("Courier", 15), command=button_mul,
-                            bg='orange')
-
-        btn_mul.grid(column=3, row=0, padx=5, pady=5)
-
-        btn_sub = tk.Button(down_frame, text='-', padx=15, pady=10, font=("Courier", 15), command=button_sub,
-                            bg='orange')
-
-        btn_sub.grid(column=3, row=1, padx=5, pady=5)
-
-        btn_add = tk.Button(down_frame, text='+', padx=15, pady=10, font=("Courier", 15), command=button_add,
-                            bg='orange')
-
-        btn_add.grid(column=3, row=2, padx=5, pady=5)
-
-        btn_div = tk.Button(down_frame, text='÷', padx=15, pady=10, font=("Courier", 15), command=button_div,
-                            bg='orange')
-
-        btn_div.grid(column=3, row=3, padx=5, pady=5)
-
-        btn_c = tk.Button(down_frame, text='C', padx=15, pady=10, font=("Courier", 15), command=button_clear,
-                          bg='orange')
-
-        btn_c.grid(column=2, row=4, padx=5, pady=5)
-
-        btn_res = tk.Button(down_frame, text='=', padx=15, pady=10, font=("Courier", 15), command=button_equal,
-                            bg='orange')
-        btn_res.grid(column=3, row=4, padx=5, pady=5)
-
-        root.mainloop()
-
-
     def search(self):
         import webbrowser
-        webbrowser.open(url='https://www.google.com/')
+        webbrowser.open(url='https://www.google.com')
 
 Bot = ChatBot()
 
-main = input("원하는 기능  1:챗봇,  2:계산기,  3:계산기 앱,  4:게임,  5:검색  >>>  ")
-if '1' in main or '챗' in main:
-    Bot.Run()
-if '2' in main or '계산' in main:
-    while True:
-        expression = input(" >>> ")
-        print(Bot.calculator(expression=expression))
-if '3' in main or'계산기 앱' in main:
-    Bot.gui_cal()
-if '4' in main or '게임' in main:
-    Bot.game()
-if '5' in main or '검색' in main:
-    Bot.search()
+Bot.Run()
 
 
 qu_chatbot = ['x의 ?배에 y의 ?배를 더한것은 ?과 같고, x의 ?배에 y의 ?배를 뺀것은 ?과 같다',

@@ -369,14 +369,6 @@ class ChatBot:
             return '당신은 그런말은 안돼요.'
         elif '불러' in chat:
             return ''
-        elif '편지' in chat or '한마디' in chat:
-            space = chat.find(' ')
-            name = chat[0:space - 2]
-            qwer = chat[space + 1:len(chat)]
-            latter = [name, '  ', qwer[0:4]]
-            qwer = qwer[qwer.find(' '):len(qwer)]
-            latter.append('%s합니다' % (qwer[0:4]))
-            return " ".join(latter)
         elif '삼각' in memory and '넓' in memory:
             if memory.find('높이') != -1:
                 if memory.find('높이') < memory.find('변'):
@@ -958,27 +950,6 @@ class ChatBot:
             url = 'https://signal.bz/news'
             webbrowser.open(url=url)
             return None
-        elif '..' in chat:
-            return '말해보세요.'
-        elif '야' in chat:
-            return '네?'
-        elif '답' in chat:
-            chat = input('무슨 일이 있었서 답답한가요?')
-            return '%s다니 그럴 수 있지요.' % (chat)
-        elif '화' in chat and '나' in chat:
-            return '그 마음 이해 합니다.'
-        elif '좋' in chat:
-            return '그말을 들으니 저도 기분이 좋네요.'
-        elif '서러' in chat or '슬' in chat:
-            return '그 마음 이해 합니다.'
-        elif '서' in chat and '슬' in chat:
-            return '안타깝네요.'
-        elif '심' in chat or '뭐' in chat:
-            return 'TV 보거나 산책 하는 것은 어때요?'
-        elif '힘' in chat:
-            return '그럴 수 있지요'
-        elif '고' in chat:
-            return '네'
         elif '메모' in chat:
             g = open('pythontest.txt', 'r')
             if '내용' in chat:
@@ -1335,7 +1306,25 @@ class ChatBot:
                             break
                 return ", ".join(cam)
         else:
-            return '이해할 수 없습니다'
+            import openai
+
+            openai.api_key = "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"
+
+            def chatbot (input_text) :
+                response = openai.Completion.create (
+                    engine = "text-davinci-002" ,
+                    prompt = input_text ,
+                    max_tokens = 1024 ,
+                    n = 1 ,
+                    stop = None ,
+                    temperature = 0.5 ,
+                    ).choices [ 0 ].text
+                return response
+
+            if __name__ == "__main__" :
+                chat = tr.translate(chat, dest='en', src='auto').text
+                response = chatbot(chat)
+                return tr.translate(response, dest='ko', src = 'auto').text
 
     def Run(self):
         f1 = open('stdout.txt', 'r')
@@ -1356,7 +1345,6 @@ class ChatBot:
                 for line in lists:
                     print(line)
                     f.write(line)
-
             xnt = 0
             en = 'qwertyuiopasdfghjklzxcvbnm'
             tr = googletrans.Translator()
@@ -1414,4 +1402,4 @@ qu_chatbot = ['x의 ?배에 y의 ?배를 더한것은 ?과 같고, x의 ?배에 
       '밑변이 ? 높이가 ?인 사각형/삼각형 의 넓이', '반지름/지름 이 r인 원의 넓이/둘레',
       '영화 추천해줘', '계산기 실행시켜줘', '~~~를번역해줘', '노래 들려줘', '해킹해줘',
       '?와 ?의 공배수/공약수 를 구해줘', '타이머 해줘', '??에게 ??해서 ???하다고 편지써줘',
-      '@#$#%@$%', '~~~~~~~~~~~~~~~~', '그외 영어도 가능']
+      '@#$#%@$%', '~~~~~~~~~~~~~~~~', '그외 다양한 것이 가능']
